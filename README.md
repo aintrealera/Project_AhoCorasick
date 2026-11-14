@@ -43,7 +43,7 @@ Execution time is measured using System.nanoTime().
 
 The average execution time is calculated in milliseconds.
 
-### 4. Experimental Results
+## 4. Experimental Results
 
 The experiments were performed using 10, 100, and 1,000 patterns with text lengths of 1,000, 10,000, and 100,000 characters. Each experiment was repeated five times, and the average execution time was calculated using System.nanoTime().
 
@@ -59,7 +59,7 @@ The experiments were performed using 10, 100, and 1,000 patterns with text lengt
 | 1,000 | 10,000 | 1.6898 | 111.3438 |
 | 1,000 | 100,000 | 6.2538 | 1055.0360 |
 
-### 5. Results Analysis
+## 5. Results Analysis
 
 The experimental results show that Aho-Corasick performs better than KMP in all tested cases.
 
@@ -71,10 +71,66 @@ Aho-Corasick uses a Trie and failure links to process multiple patterns during a
 
 Small variations in execution time between experiments may occur because of JVM optimization, memory allocation, and system activity.
 
-### 6. Conclusion
+## 6. Time Complexity Analysis
+
+Let:
+
+- N = length of the text.
+- M = total length of all patterns.
+- K = number of patterns.
+- Z = total number of matches.
+
+### Aho-Corasick
+
+- Trie construction: O(M)
+- Failure links construction: O(M) expected with hash-based transitions.
+- Searching: O(N + Z)
+
+**Overall Time Complexity: O(M + N + Z)**
+
+The algorithm processes the text in one traversal and uses failure links to avoid unnecessary repeated comparisons.
+
+### KMP
+
+For one pattern:
+
+- Preprocessing (LPS array): O(m)
+- Searching: O(N)
+
+For K patterns searched separately:
+
+**Overall Time Complexity: O(M + K × N)**
+
+KMP must scan the text separately for every pattern, which increases execution time when the number of patterns grows.
+
+## 7. Space Complexity Analysis
+
+### Aho-Corasick
+
+- Trie nodes and transitions: O(M)
+- Failure links: O(M)
+- Output links: O(M)
+- Pattern storage: O(M)
+
+**Overall Space Complexity: O(M)**
+
+The algorithm requires additional memory to store the Trie and its links. This memory allows it to search for multiple patterns efficiently.
+
+### KMP
+
+- LPS array: O(m)
+- Additional searching variables: O(1)
+
+**Overall Space Complexity: O(m)**
+
+When patterns are processed separately, the LPS array can be reused. Therefore, the auxiliary space complexity depends on the length of the longest pattern.
+
+## 8. Conclusion
 
 Based on the experiments, Aho-Corasick is significantly more efficient than running KMP separately for multiple patterns.
 
 The biggest performance difference appears when searching for 1,000 patterns in a text containing 100,000 characters.
 
-Therefore, Aho-Corasick is a suitable algorithm for applications that require fast searching of multiple keywords in large amounts of text.
+Aho-Corasick has a time complexity of O(M + N + Z) and a space complexity of O(M). KMP has a time complexity of O(M + K × N) when searching for multiple patterns separately.
+
+Therefore, Aho-Corasick is a suitable algorithm for applications that require fast searching of multiple keywords in large amounts of text. KMP remains a good choice for searching for a single pattern because it is simpler and requires less additional memory.
